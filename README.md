@@ -1,8 +1,9 @@
 # Smart Student ID Generator
 
-Maintained by **alokkumaar1**
+Maintained by **Alok kumar**
 
 Portfolio: [https://alokkumar.vercel.app/](https://alokkumar.vercel.app/)
+Linkedin: [https://www.linkedin.com/in/alokkumar48/](https://www.linkedin.com/in/alokkumar48/)
 
 A React.js application that allows users to generate student ID cards with customizable templates.
 
