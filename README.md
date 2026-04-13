@@ -11,14 +11,11 @@ A premium, modern student ID card generator with a clean dashboard-style interfa
 
 ## 🎬 Website Demo
 
-Latest flip-card UI previews:
+Latest flip-card UI preview:
 
 <p align="center">
-  <img src="./outputs/preview-front.png" width="48%" />
-  <img src="./outputs/preview-back.png" width="48%" />
+  <img src="./outputs/preview-main.png" width="80%" />
 </p>
-
-> Note: Add your latest screenshots in the `outputs` folder with names `preview-front.png` and `preview-back.png` to display them here.
 
 ---
 
