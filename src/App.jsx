@@ -22,6 +22,7 @@ const initialStudentData = {
 function App() {
   const [studentData, setStudentData] = useState(initialStudentData)
   const [isGenerated, setIsGenerated] = useState(false)
+  const currentYear = new Date().getFullYear()
 
   const handleFieldChange = (field, value) => {
     setStudentData((prev) => ({ ...prev, [field]: value }))
@@ -69,6 +70,29 @@ function App() {
             <IdCardPreview studentData={studentData} />
           </div>
         </section>
+
+        <footer className="ownership-footer" aria-label="Project ownership">
+          <p>
+            Built and maintained by <strong>Alok Kumar</strong> | Copyright (c) {currentYear}
+          </p>
+          <div className="owner-links">
+            <a href="https://www.linkedin.com/in/alokkumar48" target="_blank" rel="noreferrer">
+              LinkedIn
+            </a>
+            <a href="https://alokkumar.vercel.app/" target="_blank" rel="noreferrer">
+              Portfolio
+            </a>
+          </div>
+          <span
+            className="build-signature"
+            aria-hidden="true"
+            data-owner="Alok Kumar"
+            data-linkedin="https://www.linkedin.com/in/alokkumar48"
+            data-portfolio="https://alokkumar.vercel.app/"
+          >
+            FRAAS-OWNER-SIGNATURE
+          </span>
+        </footer>
       </main>
     </div>
   )

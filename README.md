@@ -1,9 +1,11 @@
 # FRAAS ID Generator
 
-Maintained by **Alok kumar**
+Maintained by **Alok Kumar**
 
 Portfolio: [https://alokkumar.vercel.app/](https://alokkumar.vercel.app/)
-Linkedin: [https://www.linkedin.com/in/alokkumar48/](https://www.linkedin.com/in/alokkumar48/)
+LinkedIn: [https://www.linkedin.com/in/alokkumar48/](https://www.linkedin.com/in/alokkumar48/)
+
+Copyright (c) 2026 Alok Kumar. All rights reserved.
 
 A premium, modern student ID card generator with a clean dashboard-style interface.
 
