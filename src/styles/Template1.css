@@ -1,0 +1,114 @@
+.template1 {
+  background-color: white;
+  overflow: hidden;
+}
+
+.card-header {
+  background: linear-gradient(to right, #4299e1, #667eea);
+  color: white;
+  padding: 16px;
+  text-align: center;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card-header p {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  margin-top: 4px;
+}
+
+.card-body {
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+}
+
+.card-left {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.student-photo {
+  width: 128px;
+  height: 128px;
+  border: 4px solid #4299e1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.student-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qr-code {
+  margin-top: 8px;
+  background-color: white;
+  padding: 8px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-right {
+  flex-grow: 1;
+}
+
+.student-details {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.student-details tr {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.student-details tr:last-child {
+  border-bottom: none;
+}
+
+.student-details td {
+  padding: 8px 4px;
+  font-size: 0.875rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #4a5568;
+  width: 40%;
+}
+
+.allergies-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.allergy-tag {
+  background-color: #fed7d7;
+  color: #e53e3e;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.card-footer {
+  background-color: #f7fafc;
+  padding: 12px;
+  text-align: center;
+  border-top: 1px solid #e2e8f0;
+}
+
+.card-footer p {
+  font-size: 0.75rem;
+  color: #718096;
+  margin: 2px 0;
+}

@@ -1,0 +1,159 @@
+.template2 {
+  background-color: white;
+  overflow: hidden;
+}
+
+.card-header-t2 {
+  background: linear-gradient(to right, #38a169, #2f855a);
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.school-logo {
+  width: 48px;
+  height: 48px;
+  margin-right: 16px;
+}
+
+.school-logo svg {
+  width: 100%;
+  height: 100%;
+}
+
+.school-info h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.school-info p {
+  font-size: 0.875rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.card-body-t2 {
+  padding: 16px;
+}
+
+.student-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.student-photo-t2 {
+  width: 120px;
+  height: 120px;
+  border: 4px solid #38a169;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.student-photo-t2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.student-profile h3 {
+  margin-top: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.student-profile p {
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.details-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.student-details-t2 {
+  background-color: #f7fafc;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.student-details-t2 h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #38a169;
+  margin-bottom: 8px;
+}
+
+.student-details-t2 p {
+  font-size: 0.875rem;
+  margin: 4px 0;
+}
+
+.student-details-t2 p span {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.qr-code-t2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.allergies-section {
+  background-color: #feebc8;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.allergies-section h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #dd6b20;
+  margin-bottom: 8px;
+}
+
+.allergies-list-t2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.allergy-tag-t2 {
+  background-color: #fed7d7;
+  color: #e53e3e;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+}
+
+.card-footer-t2 {
+  background-color: #f0fff4;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid #c6f6d5;
+}
+
+.footer-left,
+.footer-right {
+  font-size: 0.75rem;
+  color: #2f855a;
+}
+
+.footer-left p,
+.footer-right p {
+  margin: 2px 0;
+}
