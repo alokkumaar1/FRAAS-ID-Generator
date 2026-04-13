@@ -1,5 +1,7 @@
 # Smart Student ID Generator
 
+Maintained by **alokkumaar1**
+
 A React.js application that allows users to generate student ID cards with customizable templates.
 
 ## 🎬 Website Demo
