@@ -1,150 +1,288 @@
-import { useState } from "react";
-import "../styles/StudentForm.css";
+import { useState } from "react"
+import "../styles/StudentForm.css"
 
-const StudentForm = ({ onSubmit }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    rollNumber: "",
-    classDiv: "",
-    allergies: [],
-    photo: null,
-    photoPreview: null,
-    rackNumber: "",
-    busRouteNumber: "",
-  });
+const organizationOptions = [
+  "FRAAS Public School",
+  "FRAAS Innovation Labs",
+  "BluePeak Technologies",
+  "Northstar Consulting",
+  "Other",
+]
 
-  const [errors, setErrors] = useState({});
-  const [isGenerating, setIsGenerating] = useState(false);
+const classDivisionOptions = [
+  "Class 1 - A",
+  "Class 1 - B",
+  "Class 2 - A",
+  "Class 2 - B",
+  "Class 3 - A",
+  "Class 3 - B",
+  "Class 4 - A",
+  "Class 4 - B",
+  "Class 5 - A",
+  "Class 5 - B",
+  "Class 6 - A",
+  "Class 6 - B",
+  "Class 7 - A",
+  "Class 7 - B",
+  "Class 8 - A",
+  "Class 8 - B",
+  "Class 9 - A",
+  "Class 9 - B",
+  "Class 10 - A",
+  "Class 10 - B",
+  "Class 11 - Science",
+  "Class 11 - Commerce",
+  "Class 12 - Science",
+  "Class 12 - Commerce",
+]
 
-  const classOptions = [...Array(12)].flatMap((_, i) => [`Class ${i + 1}-A`, `Class ${i + 1}-B`]);
-  const busRoutes = [
-    "Route 1: North Campus", "Route 2: South Campus", "Route 3: East Campus", 
-    "Route 4: West Campus", "Route 5: Central Area", "Route 6: Suburban Area",
-    "Route 7: Downtown", "Route 8: Hillside Area",
-  ];
-  const allergyOptions = ["Milk", "Eggs", "Wheat", "Fish", "Gluten", "Sesame"];
+function StudentForm({ data, onFieldChange, onGenerate }) {
+  const [errors, setErrors] = useState({})
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    if (errors[name]) setErrors({ ...errors, [name]: null });
-  };
-
-  const handleAllergyChange = (allergy) => {
-    setFormData({
-      ...formData,
-      allergies: formData.allergies.includes(allergy)
-        ? formData.allergies.filter((a) => a !== allergy)
-        : [...formData.allergies, allergy],
-    });
-  };
-
-  const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFormData({ ...formData, photo: file, photoPreview: reader.result });
-      };
-      reader.readAsDataURL(file);
-      if (errors.photo) setErrors({ ...errors, photo: null });
+  const clearError = (field) => {
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }))
     }
-  };
+  }
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.rollNumber.trim()) newErrors.rollNumber = "Roll Number is required";
-    if (!formData.classDiv) newErrors.classDiv = "Class & Division is required";
-    if (!formData.rackNumber.trim()) newErrors.rackNumber = "Rack Number is required";
-    if (!formData.busRouteNumber) newErrors.busRouteNumber = "Bus Route is required";
-    if (!formData.photo) newErrors.photo = "Photo is required";
+  const handleInput = (event) => {
+    const { name, value } = event.target
+    onFieldChange(name, value)
+    clearError(name)
+  }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const handleModeChange = (mode) => {
+    onFieldChange("mode", mode)
+    onFieldChange("classDivision", "")
+    onFieldChange("designation", "")
+    clearError("classDivision")
+    clearError("designation")
+  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  const handleOrganizationSelection = (event) => {
+    const value = event.target.value
+    onFieldChange("organizationSelection", value)
+    clearError("organizationSelection")
 
-    setIsGenerating(true);
-    setTimeout(() => {
-      onSubmit(formData);
-      setIsGenerating(false);
-    }, 1500);
-  };
+    if (value !== "Other") {
+      onFieldChange("organizationName", value)
+      clearError("organizationName")
+    } else {
+      onFieldChange("organizationName", "")
+    }
+  }
+
+  const readImageFile = (file, targetField) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      onFieldChange(targetField, String(reader.result || ""))
+      clearError(targetField)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  const handlePhotoChange = (event) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+    readImageFile(file, "photoPreview")
+  }
+
+  const handleLogoChange = (event) => {
+    const file = event.target.files?.[0]
+    if (!file) {
+      return
+    }
+    readImageFile(file, "logoPreview")
+  }
+
+  const validate = () => {
+    const nextErrors = {}
+
+    if (!data.name.trim()) nextErrors.name = "Name is required"
+    if (!data.organizationSelection) nextErrors.organizationSelection = "Please select an organization"
+    if (data.organizationSelection === "Other" && !data.organizationName.trim()) {
+      nextErrors.organizationName = "Enter your organization name"
+    }
+    if (data.mode === "student" && !data.classDivision) {
+      nextErrors.classDivision = "Class / division is required"
+    }
+    if (data.mode === "professional" && !data.designation.trim()) {
+      nextErrors.designation = "Designation is required"
+    }
+    if (!data.photoPreview) nextErrors.photoPreview = "Student photo is required"
+
+    setErrors(nextErrors)
+    return Object.keys(nextErrors).length === 0
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    if (!validate()) {
+      return
+    }
+    onGenerate()
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="student-form">
-      <h2>Student Information</h2>
-
-      <div className="form-group">
-        <label>Name</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} className={errors.name ? "error" : ""} />
-        {errors.name && <p className="error-message">{errors.name}</p>}
+    <form className="student-form" onSubmit={handleSubmit}>
+      <div className="form-heading">
+        <h2>Identity Details</h2>
+        <p>Switch mode, fill required fields, and generate a modern digital ID card.</p>
       </div>
 
       <div className="form-group">
-        <label>Roll Number</label>
-        <input type="text" name="rollNumber" value={formData.rollNumber} onChange={handleChange} className={errors.rollNumber ? "error" : ""} />
-        {errors.rollNumber && <p className="error-message">{errors.rollNumber}</p>}
-      </div>
-
-      <div className="form-group">
-        <label>Class & Division</label>
-        <select name="classDiv" value={formData.classDiv} onChange={handleChange} className={errors.classDiv ? "error" : ""}>
-          <option value="">Select Class & Division</option>
-          {classOptions.map((option) => <option key={option} value={option}>{option}</option>)}
-        </select>
-        {errors.classDiv && <p className="error-message">{errors.classDiv}</p>}
-      </div>
-
-      <div className="form-group">
-        <label>Allergies (if any)</label>
-        <div className="allergies-grid">
-          {allergyOptions.map((allergy) => (
-            <div key={allergy} className="allergy-option">
-              <input type="checkbox" id={`allergy-${allergy}`} checked={formData.allergies.includes(allergy)} onChange={() => handleAllergyChange(allergy)} />
-              <label htmlFor={`allergy-${allergy}`}>{allergy}</label>
-            </div>
-          ))}
+        <label>Mode</label>
+        <div className="mode-switch" role="tablist" aria-label="ID mode">
+          <button
+            type="button"
+            className={data.mode === "student" ? "mode-btn active" : "mode-btn"}
+            onClick={() => handleModeChange("student")}
+          >
+            Student Mode
+          </button>
+          <button
+            type="button"
+            className={data.mode === "professional" ? "mode-btn active" : "mode-btn"}
+            onClick={() => handleModeChange("professional")}
+          >
+            Professional Mode
+          </button>
         </div>
       </div>
 
       <div className="form-group">
-        <label>Photo Upload</label>
-        <input type="file" accept="image/*" onChange={handlePhotoChange} className={errors.photo ? "error" : ""} />
-        {errors.photo && <p className="error-message">{errors.photo}</p>}
-
-        {formData.photoPreview && (
-          <div className="photo-preview">
-            <img src={formData.photoPreview || "/placeholder.svg"} alt="Preview" />
-          </div>
-        )}
+        <label htmlFor="name">Name</label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          value={data.name}
+          onChange={handleInput}
+          placeholder="Enter full name"
+          className={errors.name ? "error" : ""}
+        />
+        {errors.name && <p className="error-message">{errors.name}</p>}
       </div>
 
       <div className="form-group">
-        <label>Rack Number</label>
-        <input type="text" name="rackNumber" value={formData.rackNumber} onChange={handleChange} className={errors.rackNumber ? "error" : ""} />
-        {errors.rackNumber && <p className="error-message">{errors.rackNumber}</p>}
+        <label htmlFor="idNumber">ID Number</label>
+        <input
+          id="idNumber"
+          type="text"
+          name="idNumber"
+          value={data.idNumber}
+          onChange={handleInput}
+          placeholder="Leave empty to auto-generate"
+        />
       </div>
 
+      {data.mode === "student" ? (
+        <div className="form-group">
+          <label htmlFor="classDivision">Class / Division</label>
+          <select
+            id="classDivision"
+            name="classDivision"
+            value={data.classDivision}
+            onChange={handleInput}
+            className={errors.classDivision ? "error" : ""}
+          >
+            <option value="">Select class and division</option>
+            {classDivisionOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          {errors.classDivision && <p className="error-message">{errors.classDivision}</p>}
+        </div>
+      ) : (
+        <div className="form-group">
+          <label htmlFor="designation">Designation</label>
+          <input
+            id="designation"
+            type="text"
+            name="designation"
+            value={data.designation}
+            onChange={handleInput}
+            placeholder="Example: CEO, HR Manager"
+            className={errors.designation ? "error" : ""}
+          />
+          {errors.designation && <p className="error-message">{errors.designation}</p>}
+        </div>
+      )}
+
       <div className="form-group">
-        <label>Bus Route Number</label>
-        <select name="busRouteNumber" value={formData.busRouteNumber} onChange={handleChange} className={errors.busRouteNumber ? "error" : ""}>
-          <option value="">Select Bus Route</option>
-          {busRoutes.map((route) => <option key={route} value={route}>{route}</option>)}
+        <label htmlFor="organizationSelection">Organization / School Name</label>
+        <select
+          id="organizationSelection"
+          name="organizationSelection"
+          value={data.organizationSelection}
+          onChange={handleOrganizationSelection}
+          className={errors.organizationSelection ? "error" : ""}
+        >
+          <option value="">Select organization</option>
+          {organizationOptions.map((organization) => (
+            <option key={organization} value={organization}>
+              {organization}
+            </option>
+          ))}
         </select>
-        {errors.busRouteNumber && <p className="error-message">{errors.busRouteNumber}</p>}
+        {errors.organizationSelection && <p className="error-message">{errors.organizationSelection}</p>}
       </div>
 
-      <button type="submit" className="submit-btn" disabled={isGenerating}>
-        {isGenerating ? "Generating..." : "Generate ID Card"}
+      {data.organizationSelection === "Other" && (
+        <div className="form-group">
+          <label htmlFor="organizationName">Custom Organization Name</label>
+          <input
+            id="organizationName"
+            type="text"
+            name="organizationName"
+            value={data.organizationName}
+            onChange={handleInput}
+            placeholder="Type organization/school name"
+            className={errors.organizationName ? "error" : ""}
+          />
+          {errors.organizationName && <p className="error-message">{errors.organizationName}</p>}
+        </div>
+      )}
+
+      <div className="upload-grid">
+        <div className="form-group">
+          <label htmlFor="photoUpload">Photo Upload</label>
+          <input
+            id="photoUpload"
+            type="file"
+            accept="image/*"
+            onChange={handlePhotoChange}
+            className={errors.photoPreview ? "error" : ""}
+          />
+          {errors.photoPreview && <p className="error-message">{errors.photoPreview}</p>}
+
+          {data.photoPreview && (
+            <div className="photo-preview">
+              <img src={data.photoPreview} alt="Profile preview" />
+            </div>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="logoUpload">Logo Upload</label>
+          <input id="logoUpload" type="file" accept="image/*" onChange={handleLogoChange} />
+          {data.logoPreview && (
+            <div className="logo-preview">
+              <img src={data.logoPreview} alt="Logo preview" />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <button type="submit" className="submit-btn">
+        Generate ID Card
       </button>
     </form>
-  );
-};
+  )
+}
 
-export default StudentForm;
+export default StudentForm

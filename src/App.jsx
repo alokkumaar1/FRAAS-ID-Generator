@@ -1,96 +1,71 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import StudentForm from "./components/StudentForm"
 import IdCardPreview from "./components/IdCardPreview"
-import StoredCards from "./components/StoredCards"
 import "./App.css"
 
+const initialStudentData = {
+  mode: "student",
+  name: "",
+  idNumber: "",
+  classDivision: "",
+  designation: "",
+  organizationSelection: "",
+  organizationName: "",
+  photoPreview: "",
+  logoPreview: "",
+}
+
 function App() {
-  const [studentData, setStudentData] = useState(null)
-  const [template, setTemplate] = useState("template1")
-  const [storedCards, setStoredCards] = useState([])
-  const [showStoredCards, setShowStoredCards] = useState(false)
+  const [studentData, setStudentData] = useState(initialStudentData)
+  const [isGenerated, setIsGenerated] = useState(false)
 
-  useEffect(() => {
-    const stored = localStorage.getItem("studentCards")
-    if (stored) {
-      setStoredCards(JSON.parse(stored))
-    }
-  }, [])
-
-  const handleFormSubmit = (data) => {
-    const newStudentData = {
-      ...data,
-      id: Date.now().toString(),
-      createdAt: new Date().toISOString(),
-    }
-
-    setStudentData(newStudentData)
-    
-    const updatedCards = [newStudentData, ...storedCards]
-    setStoredCards(updatedCards)
-    localStorage.setItem("studentCards", JSON.stringify(updatedCards))
+  const handleFieldChange = (field, value) => {
+    setStudentData((prev) => ({ ...prev, [field]: value }))
+    setIsGenerated(false)
   }
 
-  const handleTemplateChange = (newTemplate) => {
-    setTemplate(newTemplate)
-  }
+  const handleGenerate = () => {
+    setStudentData((prev) => {
+      if (prev.idNumber.trim()) {
+        return prev
+      }
 
-  const handleViewStoredCards = () => {
-    setShowStoredCards(!showStoredCards)
-  }
-
-  const handleLoadCard = (card) => {
-    setStudentData(card)
-    setShowStoredCards(false)
-  }
-
-  const handleDeleteCard = (id) => {
-    const updatedCards = storedCards.filter((card) => card.id !== id)
-    setStoredCards(updatedCards)
-    localStorage.setItem("studentCards", JSON.stringify(updatedCards))
+      const modeCode = prev.mode === "professional" ? "PRO" : "STU"
+      const uniqueCode = String(Date.now()).slice(-6)
+      return {
+        ...prev,
+        idNumber: `FRAAS-${modeCode}-${uniqueCode}`,
+      }
+    })
+    setIsGenerated(true)
   }
 
   return (
-    <div className="container">
-      <h1 className="main-title">Smart Student ID Generator</h1>
+    <div className="app-shell">
+      <div className="ambient-shape ambient-one" aria-hidden="true" />
+      <div className="ambient-shape ambient-two" aria-hidden="true" />
 
-      <div className="app-layout">
-        <div className="form-section">
-          <StudentForm onSubmit={handleFormSubmit} />
+      <main className="container">
+        <header className="app-header">
+          <p className="eyebrow">FRAAS Platform</p>
+          <h1>FRAAS ID Generator</h1>
+          <p className="subheading">Create premium Student and Professional ID cards with live preview and one-click PNG export.</p>
+        </header>
 
-          <div className="stored-cards-section">
-            <button onClick={handleViewStoredCards} className="view-cards-btn">
-              {showStoredCards ? "Hide Saved Cards" : "View Saved Cards"}
-            </button>
-
-            {showStoredCards && (
-              <StoredCards cards={storedCards} onLoadCard={handleLoadCard} onDeleteCard={handleDeleteCard} />
-            )}
+        <section className="app-layout">
+          <div className="panel form-panel">
+            <StudentForm data={studentData} onFieldChange={handleFieldChange} onGenerate={handleGenerate} />
           </div>
-        </div>
 
-        <div className="preview-section">
-          {studentData ? (
-            <>
-              <div className="preview-header">
-                <h2>ID Card Preview</h2>
-                <div className="template-selector">
-                  <span>Template:</span>
-                  <select value={template} onChange={(e) => handleTemplateChange(e.target.value)}>
-                    <option value="template1">Template 1</option>
-                    <option value="template2">Template 2</option>
-                  </select>
-                </div>
-              </div>
-              <IdCardPreview studentData={studentData} template={template} />
-            </>
-          ) : (
-            <div className="empty-preview">
-              <p>Fill out the form and submit to generate an ID card preview</p>
+          <div className="panel preview-panel">
+            <div className="preview-headline">
+              <h2>Live ID Preview</h2>
+              {isGenerated && <span className="generated-pill">Ready</span>}
             </div>
-          )}
-        </div>
-      </div>
+            <IdCardPreview studentData={studentData} />
+          </div>
+        </section>
+      </main>
     </div>
   )
 }
