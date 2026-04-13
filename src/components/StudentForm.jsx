@@ -248,6 +248,40 @@ function StudentForm({ data, onFieldChange, onGenerate }) {
         </div>
       )}
 
+      <div className="form-group">
+        <label htmlFor="address">Address</label>
+        <input
+          id="address"
+          type="text"
+          name="address"
+          value={data.address}
+          onChange={handleInput}
+          placeholder="Enter full address"
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="issueDate">Date of Issue</label>
+        <input id="issueDate" type="date" name="issueDate" value={data.issueDate} onChange={handleInput} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="expiryDate">Expiry Date</label>
+        <input id="expiryDate" type="date" name="expiryDate" value={data.expiryDate} onChange={handleInput} />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="additionalDetails">Additional Details</label>
+        <textarea
+          id="additionalDetails"
+          name="additionalDetails"
+          value={data.additionalDetails}
+          onChange={handleInput}
+          rows="3"
+          placeholder="Emergency contact, department, blood group, or notes"
+        />
+      </div>
+
       <div className="upload-grid">
         <div className="form-group">
           <label htmlFor="photoUpload">Photo Upload</label>

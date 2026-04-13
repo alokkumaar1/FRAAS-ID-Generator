@@ -11,6 +11,10 @@ const initialStudentData = {
   designation: "",
   organizationSelection: "",
   organizationName: "",
+  address: "",
+  issueDate: "",
+  expiryDate: "",
+  additionalDetails: "",
   photoPreview: "",
   logoPreview: "",
 }
